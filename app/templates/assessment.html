@@ -1,0 +1,381 @@
+{% extends "base.html" %}
+{% block title %}Career Assessment — AI Career Guidance System{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* Inline overrides specific to this long page only */
+  .section-card { scroll-margin-top: 80px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4 py-md-5">
+
+  <!-- ── Page header ─────────────────────────────────────────────────────── -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-9">
+      <div class="d-flex align-items-center gap-3 mb-2">
+        <div class="cgn-form-icon flex-shrink-0">
+          <i class="bi bi-clipboard2-pulse-fill"></i>
+        </div>
+        <div>
+          <h2 class="fw-bold mb-0">Career Assessment</h2>
+          <p class="text-muted small mb-0">
+            Hello, <strong>{{ student_name }}</strong>! Complete all four sections below.
+          </p>
+        </div>
+      </div>
+
+      <!-- Visual progress bar (JS updates this as user fills sections) -->
+      <div class="cgn-assess-progress mt-3 mb-1">
+        <div class="d-flex justify-content-between small text-muted mb-1">
+          <span id="progress-label">0 of 4 sections completed</span>
+          <span id="progress-pct">0%</span>
+        </div>
+        <div class="progress" style="height:8px; border-radius:4px;">
+          <div id="progress-bar"
+               class="progress-bar bg-accent"
+               role="progressbar"
+               style="width:0%; transition: width 0.4s ease;"
+               aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+          </div>
+        </div>
+      </div>
+
+      <!-- Section quick-jump links -->
+      <div class="d-flex flex-wrap gap-2 mt-3">
+        <a href="#section-skills"   class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-code-square me-1"></i>Skills
+        </a>
+        <a href="#section-interests" class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-heart me-1"></i>Interests
+        </a>
+        <a href="#section-tech"     class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-tools me-1"></i>Technologies
+        </a>
+        <a href="#section-goals"    class="btn btn-sm btn-outline-secondary">
+          <i class="bi bi-bullseye me-1"></i>Goals
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- ── End header ──────────────────────────────────────────────────────── -->
+
+
+  <!-- ══════════════════════════════════════════════════════════════════════
+       ASSESSMENT FORM — all four sections on one page (scroll to navigate)
+       ══════════════════════════════════════════════════════════════════════ -->
+  <form id="assessment-form" action="" method="post" novalidate>
+  <div class="row justify-content-center g-4">
+    <div class="col-lg-9">
+
+
+      <!-- ══ SECTION A — Skills ══════════════════════════════════════════════ -->
+      <div class="card border-0 shadow-sm rounded-3 section-card" id="section-skills"
+           data-section="skills">
+        <div class="card-body p-4">
+
+          <div class="cgn-section-header mb-4">
+            <span class="cgn-section-num">A</span>
+            <div>
+              <h5 class="fw-bold mb-0">Programming & Technical Skills</h5>
+              <p class="text-muted small mb-0">
+                Tick the skills you have. Then drag the slider to rate your proficiency.
+                Select <strong>at least 3</strong>.
+              </p>
+            </div>
+          </div>
+
+          {% set ns = namespace(current_cat="") %}
+          {% for skill in skills %}
+            {# Print a category sub-heading when the category changes #}
+            {% if skill.category != ns.current_cat %}
+              {% set ns.current_cat = skill.category %}
+              <p class="text-muted small fw-semibold text-uppercase mt-3 mb-2"
+                 style="letter-spacing:.05em;">{{ skill.category }}</p>
+            {% endif %}
+
+            {# Restore state on validation re-render #}
+            {% set checked     = submitted_skills is defined and skill.key in submitted_skills %}
+            {% set saved_prof  = submitted_skills[skill.key] if (submitted_skills is defined and skill.key in submitted_skills) else 3 %}
+
+            <div class="cgn-skill-row mb-3" id="row-{{ skill.key }}">
+              <!-- Checkbox -->
+              <div class="form-check d-flex align-items-center gap-2 mb-1">
+                <input
+                  class="form-check-input skill-checkbox"
+                  type="checkbox"
+                  id="skill_{{ skill.key }}"
+                  name="skill_{{ skill.key }}"
+                  value="1"
+                  data-target="slider-{{ skill.key }}"
+                  {% if checked %}checked{% endif %}
+                />
+                <label class="form-check-label fw-semibold"
+                       for="skill_{{ skill.key }}">
+                  {{ skill.label }}
+                </label>
+              </div>
+
+              <!-- Proficiency slider — only visible when checkbox is ticked -->
+              <div class="cgn-slider-wrap {% if not checked %}d-none{% endif %}"
+                   id="slider-{{ skill.key }}">
+                <div class="d-flex align-items-center gap-3 ps-4">
+                  <input
+                    type="range"
+                    class="form-range cgn-prof-slider"
+                    id="prof_{{ skill.key }}"
+                    name="prof_{{ skill.key }}"
+                    min="1" max="5" step="1"
+                    value="{{ saved_prof }}"
+                    data-label="label-{{ skill.key }}"
+                  />
+                  <span class="cgn-prof-label badge"
+                        id="label-{{ skill.key }}">
+                    {{ proficiency_labels[saved_prof|string] if (submitted_skills is defined and skill.key in submitted_skills) else "Intermediate" }}
+                  </span>
+                </div>
+                <div class="d-flex justify-content-between ps-4 mt-1">
+                  <span class="text-muted" style="font-size:.7rem;">Beginner</span>
+                  <span class="text-muted" style="font-size:.7rem;">Expert</span>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+          <!-- Client-side error hint -->
+          <div class="alert alert-warning d-none mt-3" id="skills-error" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Please select and rate <strong>at least 3 skills</strong>.
+          </div>
+
+        </div><!-- end card-body -->
+      </div>
+      <!-- ── End Section A ──────────────────────────────────────────────── -->
+
+
+      <!-- ══ SECTION B — Interests ═══════════════════════════════════════════ -->
+      <div class="card border-0 shadow-sm rounded-3 section-card" id="section-interests"
+           data-section="interests">
+        <div class="card-body p-4">
+
+          <div class="cgn-section-header mb-4">
+            <span class="cgn-section-num">B</span>
+            <div>
+              <h5 class="fw-bold mb-0">Technical Interests</h5>
+              <p class="text-muted small mb-0">
+                Click the cards that genuinely excite you. Select
+                <strong>at least 2</strong>.
+              </p>
+            </div>
+          </div>
+
+          <div class="row g-2" id="interests-grid">
+            {% for interest in interests %}
+              {% set is_selected = submitted_interests is defined and interest.key in submitted_interests %}
+              <div class="col-sm-6 col-md-4">
+                <label class="cgn-interest-card {% if is_selected %}cgn-interest-card--selected{% endif %}">
+                  <input
+                    type="checkbox"
+                    name="interest_{{ interest.key }}"
+                    value="1"
+                    class="interest-checkbox visually-hidden"
+                    {% if is_selected %}checked{% endif %}
+                  />
+                  <i class="bi {{ interest.icon }} fs-4 mb-1"></i>
+                  <span class="small fw-semibold text-center">{{ interest.label }}</span>
+                </label>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="alert alert-warning d-none mt-3" id="interests-error" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            Please select <strong>at least 2 interests</strong>.
+          </div>
+
+        </div>
+      </div>
+      <!-- ── End Section B ──────────────────────────────────────────────── -->
+
+
+      <!-- ══ SECTION C — Technologies ════════════════════════════════════════ -->
+      <div class="card border-0 shadow-sm rounded-3 section-card" id="section-tech"
+           data-section="tech">
+        <div class="card-body p-4">
+
+          <div class="cgn-section-header mb-4">
+            <span class="cgn-section-num">C</span>
+            <div>
+              <h5 class="fw-bold mb-0">Preferred Technologies</h5>
+              <p class="text-muted small mb-0">
+                Check every tool or platform you have used or want to work with.
+                This is optional but helps accuracy.
+              </p>
+            </div>
+          </div>
+
+          {% for group_name, group_techs in technologies.items() %}
+            <p class="text-muted small fw-semibold text-uppercase mt-3 mb-2"
+               style="letter-spacing:.05em;">{{ group_name }}</p>
+            <div class="d-flex flex-wrap gap-2 mb-1">
+              {% for tech in group_techs %}
+                {% set safe_key = tech.replace(" ", "_").replace("/", "_").replace(".", "_") %}
+                {% set is_checked = submitted_technologies is defined and tech in submitted_technologies %}
+                <label class="cgn-tech-tag {% if is_checked %}cgn-tech-tag--selected{% endif %}">
+                  <input
+                    type="checkbox"
+                    name="tech_{{ safe_key }}"
+                    value="1"
+                    class="visually-hidden tech-checkbox"
+                    {% if is_checked %}checked{% endif %}
+                  />
+                  {{ tech }}
+                </label>
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+        </div>
+      </div>
+      <!-- ── End Section C ──────────────────────────────────────────────── -->
+
+
+      <!-- ══ SECTION D — Career Goals ═══════════════════════════════════════ -->
+      <div class="card border-0 shadow-sm rounded-3 section-card" id="section-goals"
+           data-section="goals">
+        <div class="card-body p-4">
+
+          <div class="cgn-section-header mb-4">
+            <span class="cgn-section-num">D</span>
+            <div>
+              <h5 class="fw-bold mb-0">Career Goals & Preferences</h5>
+              <p class="text-muted small mb-0">
+                Tell us where you want to go. This shapes your personalised roadmap.
+              </p>
+            </div>
+          </div>
+
+          <!-- Short-term role -->
+          <div class="mb-4">
+            <label for="short_term_role" class="form-label fw-semibold">
+              Where do you want to be in the next 1–2 years?
+              <span class="text-danger">*</span>
+            </label>
+            <select class="form-select" id="short_term_role" name="short_term_role" required>
+              <option value="" disabled
+                {% if not (submitted_goals is defined and submitted_goals.short_term_role) %}selected{% endif %}>
+                — Choose a target role —
+              </option>
+              {% set roles = [
+                "AI / ML Engineer",
+                "Data Scientist",
+                "Data Analyst",
+                "Software Developer",
+                "Web Developer",
+                "Cybersecurity Analyst",
+                "Cloud Engineer",
+                "Research Intern",
+                "Still exploring — not sure yet"
+              ] %}
+              {% for role in roles %}
+                <option value="{{ role }}"
+                  {% if submitted_goals is defined and submitted_goals.short_term_role == role %}selected{% endif %}>
+                  {{ role }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Work style -->
+          <div class="mb-4">
+            <p class="form-label fw-semibold mb-2">
+              What work style suits you best?
+              <span class="text-danger">*</span>
+            </p>
+            <div class="row g-2">
+              {% set work_styles = [
+                ("individual",   "bi-person-fill",        "Independent work",     "I prefer working alone on focused tasks."),
+                ("team",         "bi-people-fill",         "Team collaboration",   "I thrive in a team environment."),
+                ("mixed",        "bi-person-fill-add",     "Mix of both",          "I enjoy both independent and team work."),
+                ("remote",       "bi-laptop",              "Remote / flexible",    "I prefer working from home or flexible hours."),
+              ] %}
+              {% for val, icon, title, desc in work_styles %}
+                {% set is_sel = submitted_goals is defined and submitted_goals.work_style == val %}
+                <div class="col-sm-6">
+                  <label class="cgn-work-style-card {% if is_sel %}cgn-work-style-card--selected{% endif %}">
+                    <input type="radio" name="work_style" value="{{ val }}"
+                           class="visually-hidden work-style-radio"
+                           {% if is_sel %}checked{% endif %} required />
+                    <i class="bi {{ icon }} fs-4 mb-1 text-accent d-block"></i>
+                    <strong class="d-block">{{ title }}</strong>
+                    <small class="text-muted">{{ desc }}</small>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="alert alert-warning d-none mt-2" id="workstyle-error" role="alert">
+              <i class="bi bi-exclamation-triangle me-2"></i>Please select a work style.
+            </div>
+          </div>
+
+          <!-- Learning style -->
+          <div class="mb-4">
+            <label for="learning_style" class="form-label fw-semibold">
+              How do you prefer to learn new things?
+            </label>
+            <select class="form-select" id="learning_style" name="learning_style">
+              <option value="">— Optional —</option>
+              <option value="videos"     {% if submitted_goals is defined and submitted_goals.get('learning_style') == 'videos'     %}selected{% endif %}>Video courses (YouTube, Udemy, Coursera)</option>
+              <option value="books"      {% if submitted_goals is defined and submitted_goals.get('learning_style') == 'books'      %}selected{% endif %}>Books & documentation</option>
+              <option value="projects"   {% if submitted_goals is defined and submitted_goals.get('learning_style') == 'projects'   %}selected{% endif %}>Building projects & experimenting</option>
+              <option value="mentorship" {% if submitted_goals is defined and submitted_goals.get('learning_style') == 'mentorship' %}selected{% endif %}>Mentorship & peer learning</option>
+              <option value="classroom"  {% if submitted_goals is defined and submitted_goals.get('learning_style') == 'classroom'  %}selected{% endif %}>Structured classroom / bootcamp</option>
+            </select>
+          </div>
+
+          <!-- Dream role (free text) -->
+          <div class="mb-2">
+            <label for="dream_role" class="form-label fw-semibold">
+              Describe your dream role or career goal
+              <span class="text-muted fw-normal">(optional)</span>
+            </label>
+            <textarea
+              class="form-control"
+              id="dream_role"
+              name="dream_role"
+              rows="3"
+              maxlength="500"
+              placeholder="e.g. I want to build AI products at a startup, or work as an NLP researcher at a top university..."
+            >{{ submitted_goals.dream_role if submitted_goals is defined and submitted_goals.dream_role else "" }}</textarea>
+            <div class="form-text text-muted">Maximum 500 characters.</div>
+          </div>
+
+        </div>
+      </div>
+      <!-- ── End Section D ──────────────────────────────────────────────── -->
+
+
+      <!-- ── Submit area ──────────────────────────────────────────────────── -->
+      <div class="d-flex gap-3 align-items-center justify-content-between mt-2 flex-wrap">
+        <a href="{{ url_for('profile.index') }}" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left me-1"></i>Back to Profile
+        </a>
+        <button type="submit" class="btn btn-accent btn-lg px-5" id="submit-btn">
+          <i class="bi bi-send-fill me-2"></i>Submit Assessment
+        </button>
+      </div>
+      <!-- ── End submit ───────────────────────────────────────────────────── -->
+
+
+    </div><!-- end col -->
+  </div><!-- end row -->
+  </form>
+  <!-- ── End Form ─────────────────────────────────────────────────────────── -->
+
+</div><!-- end container -->
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/assessment.js') }}"></script>
+{% endblock %}

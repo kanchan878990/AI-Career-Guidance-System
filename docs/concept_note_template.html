@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IBM SkillsBuild Masterclass — Concept Note</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: A4 portrait;
+      margin: 11mm 13mm 11mm 13mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      font-size: 8.6pt;
+      line-height: 1.42;
+      color: #1e293b;
+      background: #ffffff;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Page container */
+    .doc-page {
+      position: relative;
+      min-height: 274mm;
+      max-height: 274mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      break-after: page;
+      overflow: hidden;
+    }
+
+    .doc-page:last-child {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    .page-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Accent Line */
+    .top-accent {
+      height: 4px;
+      background: linear-gradient(90deg, #0f62fe 0%, #0043ce 45%, #1192e8 100%);
+      width: 100%;
+      border-radius: 2px;
+      margin-bottom: 8px;
+    }
+
+    /* Header */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 1.5px solid #cbd5e1;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+
+    .brand-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 7.5pt;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #0f62fe;
+      background: #edf5ff;
+      border: 1px solid #d0e2ff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+
+    .doc-title {
+      font-size: 16.5pt;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+      line-height: 1.15;
+    }
+
+    .doc-subtitle {
+      font-size: 8.8pt;
+      font-weight: 500;
+      color: #0043ce;
+      margin-top: 2px;
+    }
+
+    .header-badge {
+      text-align: right;
+      font-size: 7.5pt;
+      color: #475569;
+      line-height: 1.35;
+      background: #f8fafc;
+      padding: 5px 10px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      flex-shrink: 0;
+    }
+
+    /* Metadata Bar */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1.15fr 1.7fr;
+      gap: 6px;
+      margin-bottom: 9px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 6px 10px;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meta-label {
+      font-size: 6.8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: #64748b;
+      margin-bottom: 2px;
+    }
+
+    .meta-value {
+      font-size: 7.9pt;
+      font-weight: 600;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .sdg-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 7pt;
+      font-weight: 800;
+      color: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .sdg-8 { background: #A21942; }
+    .sdg-4 { background: #C5192D; }
+
+    /* Section Styling */
+    .section-block {
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 9.8pt;
+      font-weight: 700;
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 5px;
+      padding-bottom: 3px;
+      border-bottom: 1.2px solid #e2e8f0;
+    }
+
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 17px;
+      height: 17px;
+      border-radius: 3px;
+      background: #0f62fe;
+      color: #ffffff;
+      font-size: 7.5pt;
+      font-weight: 700;
+    }
+
+    p {
+      margin-bottom: 5px;
+      text-align: justify;
+    }
+
+    /* Executive Summary Callout */
+    .callout-box {
+      background: #eff6ff;
+      border-left: 3px solid #0f62fe;
+      border-radius: 0 5px 5px 0;
+      padding: 6px 9px;
+      margin-bottom: 6px;
+      font-size: 8.4pt;
+      color: #1e3a8a;
+    }
+
+    .callout-box strong {
+      color: #172554;
+    }
+
+    /* Problem Grid */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .problem-card {
+      background: #ffffff;
+      border: 1px solid #fed7aa;
+      border-left: 2.5px solid #ea580c;
+      border-radius: 4px;
+      padding: 5px 8px;
+    }
+
+    .problem-title {
+      font-weight: 700;
+      font-size: 7.9pt;
+      color: #9a3412;
+      margin-bottom: 1px;
+    }
+
+    .problem-desc {
+      font-size: 7.5pt;
+      color: #431407;
+      line-height: 1.35;
+      text-align: left;
+      margin-bottom: 0;
+    }
+
+    /* Solution Flow */
+    .solution-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 4.5px;
+      margin-top: 4px;
+    }
+
+    .solution-item {
+      display: flex;
+      gap: 7px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 5px;
+      padding: 5px 8px;
+      align-items: flex-start;
+    }
+
+    .solution-pill {
+      min-width: 17px;
+      height: 17px;
+      background: #0043ce;
+      color: #ffffff;
+      font-size: 7.2pt;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .solution-text strong {
+      color: #0f172a;
+      font-size: 8.1pt;
+    }
+
+    .solution-text p {
+      margin-bottom: 0;
+      font-size: 7.6pt;
+      color: #334155;
+      line-height: 1.33;
+      text-align: left;
+    }
+
+    /* Architecture Visual */
+    .arch-wrapper {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 7px;
+      margin: 5px 0 7px 0;
+    }
+
+    .arch-code-box {
+      background: #0f172a;
+      border-radius: 5px;
+      padding: 7px 9px;
+      color: #f8fafc;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 6.8pt;
+      line-height: 1.28;
+      border: 1px solid #334155;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .arch-code-box pre {
+      white-space: pre;
+    }
+
+    .tech-stack-column {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .tech-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 4px 7px;
+    }
+
+    .tech-label {
+      font-size: 6.6pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      color: #0f62fe;
+    }
+
+    .tech-val {
+      font-size: 7.5pt;
+      color: #1e293b;
+      font-weight: 500;
+      line-height: 1.25;
+    }
+
+    /* Careers Grid */
+    .careers-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .career-item {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 4px 7px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .career-header {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .career-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 1.5px;
+      background: #0f62fe;
+      flex-shrink: 0;
+    }
+
+    .career-name {
+      font-size: 7.9pt;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .career-skills {
+      font-size: 7.2pt;
+      color: #475569;
+      line-height: 1.25;
+    }
+
+    /* Impact & Roadmap */
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .impact-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-top: 2px solid #16a34a;
+      border-radius: 4px;
+      padding: 5px 7px;
+    }
+
+    .impact-title {
+      font-size: 7.6pt;
+      font-weight: 700;
+      color: #15803d;
+      margin-bottom: 2px;
+    }
+
+    .impact-desc {
+      font-size: 7.1pt;
+      color: #166534;
+      line-height: 1.28;
+      text-align: left;
+      margin-bottom: 0;
+    }
+
+    .roadmap-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .roadmap-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 4px 8px;
+    }
+
+    .roadmap-badge {
+      padding: 1.5px 6px;
+      border-radius: 3px;
+      font-size: 6.8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .badge-done { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+    .badge-next { background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc; }
+    .badge-plan { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+    .roadmap-info {
+      font-size: 7.5pt;
+      color: #334155;
+      line-height: 1.28;
+    }
+
+    /* Page Footers */
+    .page-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 6.9pt;
+      color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 5px;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== PAGE 1 ==================== -->
+  <div class="doc-page">
+    <div class="page-content">
+      <div class="top-accent"></div>
+
+      <!-- Header -->
+      <div class="header-container">
+        <div>
+          <div class="brand-tag">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            IBM SkillsBuild Masterclass
+          </div>
+          <h1 class="doc-title">AI Career Guidance System</h1>
+          <div class="doc-subtitle">Concept Note — Intelligent Skill Assessment & Technical Career Transition Engine</div>
+        </div>
+        <div class="header-badge">
+          <strong>Category / Track:</strong><br>
+          AI & Real-Life Problem Solving<br>
+          <span style="color:#0f62fe; font-weight: 700;">Full-Stack Production Ready</span>
+        </div>
+      </div>
+
+      <!-- Metadata Bar -->
+      <div class="meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">Primary SDG</span>
+          <div class="meta-value">
+            <span class="sdg-pill sdg-8">SDG 8</span>
+            <span>Decent Work & Growth (8.6)</span>
+          </div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Secondary SDG</span>
+          <div class="meta-value">
+            <span class="sdg-pill sdg-4">SDG 4</span>
+            <span>Quality Education (4.4)</span>
+          </div>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Target Beneficiaries</span>
+          <div class="meta-value">
+            <span>Engineering Students & Job Seekers in Tier-2/3 Cities</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. Executive Summary -->
+      <div class="section-block">
+        <div class="section-title">
+          <span class="section-num">1</span>
+          <span>Executive Summary</span>
+        </div>
+        <div class="callout-box">
+          The <strong>AI Career Guidance System</strong> is a production-ready, full-stack intelligent web application engineered to bridge the critical gap between academic education and industry talent demands. In emerging markets and regional education hubs (Tier-2 and Tier-3 cities), thousands of students graduate annually without objective, personalized career direction or an understanding of their actual workplace readiness.
+        </div>
+        <p>
+          Our solution provides students with a scientific, transparent self-assessment interface. Leveraging a hybrid scoring engine—combining <strong>63-dimensional continuous vector-space cosine similarity (<code>scikit-learn</code>)</strong> with <strong>calibrated industry heuristic rules</strong>—the platform evaluates self-reported skills, proficiency levels, domain interests, tools, and education. It outputs ranked career alignments across seven core technical roles, complete with deterministic <strong>Confidence Scoring</strong>, <strong>Skill-Gap Analysis</strong>, and actionable <strong>Learning Roadmaps</strong>.
+        </p>
+      </div>
+
+      <!-- 2. Problem Statement & Context -->
+      <div class="section-block">
+        <div class="section-title">
+          <span class="section-num">2</span>
+          <span>Problem Statement & Context</span>
+        </div>
+        <p>
+          According to global employability surveys, over <strong>80% of engineering and technology graduates</strong> are not immediately employable for modern software engineering, data science, or cybersecurity roles. The root systemic drivers include:
+        </p>
+        <div class="problem-grid">
+          <div class="problem-card">
+            <div class="problem-title">1. Lack of Personalized Mentorship</div>
+            <p class="problem-desc">In regional institutions, career counseling is either absent or limited to generic, high-level talks without individual technical evaluation.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-title">2. Subjective Career Choices</div>
+            <p class="problem-desc">Students frequently choose career paths based on hype or peer pressure rather than objective alignment with their skills and aptitudes.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-title">3. Black-Box Confusion</div>
+            <p class="problem-desc">Existing online solutions rely on opaque questionnaires with hidden paywalls or simplistic keyword matching that fails to gauge proficiency depth.</p>
+          </div>
+          <div class="problem-card">
+            <div class="problem-title">4. Economic Friction in Tier-2/3 Cities</div>
+            <p class="problem-desc">Prohibitive placement coaching fees prevent disadvantaged students from receiving actionable feedback on how to upskill for decent employment.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Proposed Solution & Innovation -->
+      <div class="section-block">
+        <div class="section-title">
+          <span class="section-num">3</span>
+          <span>Proposed Solution & Innovation</span>
+        </div>
+        <p>
+          The <strong>AI Career Guidance System</strong> democratizes career advisory services through a browser-based, accessible platform that requires no high-end hardware or expensive subscriptions:
+        </p>
+        <div class="solution-grid">
+          <div class="solution-item">
+            <div class="solution-pill">1</div>
+            <div class="solution-text">
+              <strong>Structured Student Profiling:</strong>
+              <p>Gathers educational background, field of study, and baseline career aspirations.</p>
+            </div>
+          </div>
+          <div class="solution-item">
+            <div class="solution-pill">2</div>
+            <div class="solution-text">
+              <strong>Comprehensive 4-Section Assessment:</strong>
+              <p>Captures self-reported technical skills across 18 domains with 4-level proficiency ratings (Beginner, Intermediate, Advanced, Proficient), 12 domain interest categories, and hands-on familiarity with 33 industry technologies.</p>
+            </div>
+          </div>
+          <div class="solution-item">
+            <div class="solution-pill">3</div>
+            <div class="solution-text">
+              <strong>Hybrid AI Recommendation Engine:</strong>
+              <p>Translates candidate responses into a 63-dimensional weighted feature vector; calculates cosine similarity via <code>scikit-learn</code>; applies domain constraint heuristics; blends 40% Cosine Similarity with 60% Rule Heuristics to guarantee mathematically bounded scores in [0, 100]%.</p>
+            </div>
+          </div>
+          <div class="solution-item">
+            <div class="solution-pill">4</div>
+            <div class="solution-text">
+              <strong>Deterministic Confidence Metric:</strong>
+              <p>Evaluates whether an assessment has sufficient depth (High &ge; 75%, Moderate 50–74%, Preliminary &lt; 50%), preventing premature or misleading conclusions.</p>
+            </div>
+          </div>
+          <div class="solution-item">
+            <div class="solution-pill">5</div>
+            <div class="solution-text">
+              <strong>Actionable Results & Roadmaps:</strong>
+              <p>Delivers top career rankings, match explanations, missing prerequisite skills, recommended tools, and printable reports.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page 1 Footer -->
+    <div class="page-footer">
+      <span>IBM SkillsBuild Masterclass &bull; AI Career Guidance System</span>
+      <span>Concept Note &bull; Page 1 of 2</span>
+    </div>
+  </div>
+
+  <!-- ==================== PAGE 2 ==================== -->
+  <div class="doc-page">
+    <div class="page-content">
+      <div class="top-accent"></div>
+
+      <!-- Page 2 Sub-Header -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 4px; margin-bottom: 7px;">
+        <span style="font-size: 7.5pt; font-weight: 700; color: #0f62fe; text-transform: uppercase; letter-spacing: 0.5px;">System Architecture, Supported Benchmarks & Impact</span>
+        <span style="font-size: 7.5pt; color: #64748b;">Concept Note &bull; Continued</span>
+      </div>
+
+      <!-- 4. System Architecture & Technical Stack -->
+      <div class="section-block">
+        <div class="section-title">
+          <span class="section-num">4</span>
+          <span>System Architecture & Technical Stack</span>
+        </div>
+        <div class="arch-wrapper">
+          <div class="arch-code-box">
+<pre>[ Student / User ]
+       │  (HTTP / Web Browser)
+       ▼
+[ Bootstrap 5 + Vanilla CSS Interface ]
+       │  (Form Submission / Session Auth)
+       ▼
+[ Flask Application (Python 3.10+) ]
+   ├── Session Guards &amp; Ownership Validation
+   ├── REST / Page Controllers (profile, test, results)
+   └── SQLite Relational Store (students, assessments)
+       │
+       ▼
+[ Hybrid AI Engine (app/engine/) ]
+   ├── Vectorizer (63-dim feature space, L2 unit norm)
+   ├── Cosine Similarity via scikit-learn
+   ├── Deterministic Confidence Scoring Engine
+   └── Rule Heuristics &amp; Skill-Gap Analysis</pre>
+          </div>
+          <div class="tech-stack-column">
+            <div class="tech-card">
+              <div class="tech-label">Backend & App Server</div>
+              <div class="tech-val">Python 3.10+, Flask, Jinja2 Templating, SQLite3 relational persistence</div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-label">Machine Learning & Numerics</div>
+              <div class="tech-val">scikit-learn, NumPy, pandas (63-dimensional weighted feature space)</div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-label">Frontend Design System</div>
+              <div class="tech-val">Semantic HTML5, CSS3 Custom Properties, Responsive UI, Dark Mode</div>
+            </div>
+            <div class="tech-card">
+              <div class="tech-label">Quality Assurance & Reliability</div>
+              <div class="tech-val">Automated test suite (45/45 automated unit & integration tests passing)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Career Benchmarks Supported -->
+      <div class="section-block">
+        <div class="section-title">
+          <span class="section-num">5</span>
+          <span>Career Benchmarks Supported</span>
+        </div>
+        <p style="font-size: 7.6pt; color: #475569; margin-bottom: 4px;">
+          The platform provides mathematically calibrated matching for 7 industry-standard tech careers:
+        </p>
+        <div class="careers-grid">
+          <div class="career-item">
+            <div class="career-header">
+              <div class="career-dot"></div>
+              <div class="career-name">1. AI / Machine Learning Engineer</div>
+            </div>
+            <div class="career-skills">Python, Machine Learning, Deep Learning, TensorFlow, PyTorch, Linear Algebra</div>
+          </div>
+
+          <div class="career-item">
+            <div class="career-header">
+              <div class="career-dot"></div>
+              <div class="career-name">2. Data Scientist</div>
+            </div>
+            <div class="career-skills">Python, Statistics, Machine Learning, Data Analysis, SQL, Model Deployment</div>
+          </div>
+
+          <div class="career-item">
+            <div class="career-header">
+              <div class="career-dot"></div>
+              <div class="career-name">3. Data Analyst</div>
+            </div>
+            <div class="career-skills">SQL, Power BI, Excel, Tableau, Data Cleaning, Business Intelligence</div>
+          </div>
+
+          <div class="career-item">
+            <div class="career-header">
+              <div class="career-dot"></div>
+              <div class="career-name">4. Web Developer</div>
+            </div>
+            <div class="career-skills">JavaScript, React, Node.js, HTML/CSS, REST APIs, Git Version Control</div>
+          </div>
+
+          <div class="career-item">
+            <div class="career-header">
+              <div class="career-dot"></div>
+              <div class="career-name">5. Cybersecurity Analyst</div>
+            </div>
+            <div class="career-skills">Network Security, Linux, Ethical Hacking, Wireshark, Cryptography, SIEM</div>
+          </div>
+
+          <div class="career-item">
+            <div class="career-header">
+              <div class="career-dot"></div>
+              <div class="career-name">6. Cloud Engineer</div>
+            </div>
+            <div class="career-skills">AWS, Azure, Docker, Kubernetes, Linux, Infrastructure as Code</div>
+          </div>
+
+          <div class="career-item" style="grid-column: span 2;">
+            <div class="career-header">
+              <div class="career-dot"></div>
+              <div class="career-name">7. Mobile App Developer</div>
+            </div>
+            <div class="career-skills">Flutter, Android, React Native, Swift, Kotlin, Mobile UI Design & Cross-Platform Systems</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Social Impact & Market Potential -->
+      <div class="section-block">
+        <div class="section-title">
+          <span class="section-num">6</span>
+          <span>Social Impact & Market Potential</span>
+        </div>
+        <div class="impact-grid">
+          <div class="impact-card">
+            <div class="impact-title">Zero-Barrier Access</div>
+            <p class="impact-desc">Operates locally or on lightweight cloud tiers; runs smoothly on low-bandwidth mobile connections without expensive hardware.</p>
+          </div>
+          <div class="impact-card">
+            <div class="impact-title">Institutional Scalability</div>
+            <p class="impact-desc">Deployable across polytechnics, state colleges, and training academies as an automated, standardized placement readiness diagnostic.</p>
+          </div>
+          <div class="impact-card">
+            <div class="impact-title">Reduced Hiring Mismatch</div>
+            <p class="impact-desc">Equips students with transparent missing-skill roadmaps before campus hiring seasons, cutting screening overhead for employers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Roadmap & Future Scope -->
+      <div class="section-block">
+        <div class="section-title">
+          <span class="section-num">7</span>
+          <span>Roadmap & Future Scope</span>
+        </div>
+        <div class="roadmap-container">
+          <div class="roadmap-card">
+            <span class="roadmap-badge badge-done">Phase 1 &bull; Completed</span>
+            <div class="roadmap-info"><strong>Production Core:</strong> Smart Hybrid Cosine-Similarity Career Matching, Confidence Scoring, and Responsive Web UI.</div>
+          </div>
+          <div class="roadmap-card">
+            <span class="roadmap-badge badge-next">Phase 2 &bull; Upcoming</span>
+            <div class="roadmap-info"><strong>Explainability & Curricula:</strong> Deep Explainable AI (XAI) feature attribution, dynamic skill-gap analytics, and personalized 30/60/90-day learning curricula.</div>
+          </div>
+          <div class="roadmap-card">
+            <span class="roadmap-badge badge-plan">Phase 3 &bull; Planned</span>
+            <div class="roadmap-info"><strong>Smart Ingestion:</strong> Automated resume parsing & LinkedIn profile analysis for instant assessment pre-population.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page 2 Footer -->
+    <div class="page-footer">
+      <span>IBM SkillsBuild Masterclass &bull; AI-Powered Career Guidance System &bull; Official Submission Document</span>
+      <span>Concept Note &bull; Page 2 of 2</span>
+    </div>
+  </div>
+
+</body>
+</html>

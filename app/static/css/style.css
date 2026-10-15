@@ -1,0 +1,684 @@
+/* =============================================================================
+   app/static/css/style.css
+   Custom styles for the AI Career Guidance System.
+
+   How this file is organised:
+     1. CSS Variables (colour palette, fonts, spacing)
+     2. Global resets & base styles
+     3. Navbar
+     4. Hero section
+     5. "How It Works" steps
+     6. Career path cards
+     7. CTA Banner
+     8. Footer
+     9. Utility classes
+    10. Responsive tweaks
+   ============================================================================= */
+
+
+/* ── 1. CSS Variables ──────────────────────────────────────────────────────── */
+:root {
+    /* Colour palette */
+    --cgn-bg:           #f8f9fb;        /* Page background */
+    --cgn-surface:      #ffffff;        /* Card / panel background */
+    --cgn-border:       #e5e7eb;        /* Subtle borders */
+    --cgn-text:         #1f2328;        /* Primary text */
+    --cgn-muted:        #6b7280;        /* Secondary / helper text */
+    --cgn-accent:       #4f46e5;        /* Indigo — primary action colour */
+    --cgn-accent-light: #818cf8;        /* Lighter indigo for headings on dark bg */
+    --cgn-accent-soft:  rgba(79,70,229,0.10); /* Soft indigo tint for badges */
+    --cgn-navy:         #0f172a;        /* Dark navy — navbar & hero */
+    --cgn-footer-bg:    #1e293b;        /* Footer background */
+
+    /* Typography */
+    --cgn-font: -apple-system, "Segoe UI", system-ui, Roboto, sans-serif;
+    --cgn-radius: 12px;
+    --cgn-radius-sm: 8px;
+    --cgn-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --cgn-shadow-hover: 0 6px 24px rgba(0,0,0,0.13);
+}
+
+
+/* ── 2. Global Base ────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--cgn-font);
+    background-color: var(--cgn-bg);
+    color: var(--cgn-text);
+    line-height: 1.65;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+a {
+    color: var(--cgn-accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Surface background helper used on alternating sections */
+.bg-surface {
+    background-color: var(--cgn-surface);
+}
+
+
+/* ── 3. Navbar ─────────────────────────────────────────────────────────────── */
+.cgn-navbar {
+    background-color: var(--cgn-navy);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+.cgn-navbar .navbar-brand {
+    font-size: 1.1rem;
+    letter-spacing: -0.3px;
+}
+
+.cgn-navbar .nav-link {
+    color: rgba(255,255,255,0.78) !important;
+    font-size: 0.9rem;
+    padding: 0.45rem 0.75rem;
+    border-radius: var(--cgn-radius-sm);
+    transition: background 0.15s, color 0.15s;
+}
+
+.cgn-navbar .nav-link:hover,
+.cgn-navbar .nav-link.active {
+    background: rgba(255,255,255,0.08);
+    color: #fff !important;
+}
+
+/* Accent colour applied to the "AI" word in the brand */
+.text-accent {
+    color: var(--cgn-accent-light) !important;
+}
+
+.text-accent-light {
+    color: var(--cgn-accent-light);
+}
+
+
+/* ── 4. Hero Section ────────────────────────────────────────────────────────── */
+.cgn-hero {
+    background: linear-gradient(135deg, var(--cgn-navy) 0%, #1e1b4b 60%, #312e81 100%);
+    min-height: 88vh;
+    padding: 5rem 0 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle decorative radial glow behind the hero text */
+.cgn-hero::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.cgn-hero::after {
+    content: "";
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(139,92,246,0.14) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.text-white-75 {
+    color: rgba(255,255,255,0.75);
+}
+
+/* Accent badge above the hero headline */
+.bg-accent-soft {
+    background-color: var(--cgn-accent-soft) !important;
+}
+
+/* Stat pills in the hero footer */
+.cgn-stat-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 50px;
+    padding: 0.45rem 1.1rem;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+
+/* ── 5. "How It Works" Steps ────────────────────────────────────────────────── */
+.cgn-step-card {
+    background: var(--cgn-surface);
+    border: 1px solid var(--cgn-border);
+    border-radius: var(--cgn-radius);
+    box-shadow: var(--cgn-shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.cgn-step-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--cgn-shadow-hover);
+}
+
+/* Numbered circle badge in the top-right of each step card */
+.cgn-step-num {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 32px;
+    background: var(--cgn-accent);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 8px rgba(79,70,229,0.35);
+}
+
+
+/* ── 6. Career Cards ────────────────────────────────────────────────────────── */
+.cgn-career-card {
+    background: var(--cgn-surface);
+    border: 1px solid var(--cgn-border);
+    border-radius: var(--cgn-radius);
+    box-shadow: var(--cgn-shadow);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    cursor: default;
+}
+
+.cgn-career-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--cgn-shadow-hover);
+    border-color: var(--card-color, var(--cgn-accent));
+}
+
+.cgn-career-card--muted {
+    background: var(--cgn-bg);
+    border-style: dashed;
+}
+
+/* Coloured icon circle — uses --card-color CSS variable per card */
+.cgn-career-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--cgn-radius-sm);
+    background: color-mix(in srgb, var(--card-color, var(--cgn-accent)) 14%, transparent);
+    color: var(--card-color, var(--cgn-accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+/* Skill / tech tag badges inside career cards */
+.badge.bg-label {
+    background-color: var(--cgn-bg) !important;
+    color: var(--cgn-text) !important;
+    border: 1px solid var(--cgn-border);
+    font-weight: 500;
+    font-size: 0.72rem;
+}
+
+
+/* ── 7. CTA Banner ──────────────────────────────────────────────────────────── */
+.cgn-cta-banner {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+
+
+/* ── 8. Footer ──────────────────────────────────────────────────────────────── */
+.cgn-footer {
+    background-color: var(--cgn-footer-bg);
+    color: rgba(255,255,255,0.6);
+    font-size: 0.875rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.cgn-footer .text-muted {
+    color: rgba(255,255,255,0.45) !important;
+}
+
+.cgn-footer .fw-semibold {
+    color: rgba(255,255,255,0.88);
+}
+
+
+/* ── 9. Utility / Button Overrides ──────────────────────────────────────────── */
+
+/* Primary action button */
+.btn-accent {
+    background-color: var(--cgn-accent);
+    border-color: var(--cgn-accent);
+    color: #fff;
+    font-weight: 600;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.btn-accent:hover {
+    background-color: #4338ca;
+    border-color: #4338ca;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.btn-accent:active {
+    transform: translateY(0);
+}
+
+
+/* ── 10. Responsive Tweaks ───────────────────────────────────────────────────── */
+@media (max-width: 767.98px) {
+    .cgn-hero {
+        min-height: auto;
+        padding: 4rem 0 3rem;
+    }
+
+    .cgn-hero h1 {
+        font-size: 2rem;
+    }
+
+    .cgn-stat-pill {
+        font-size: 0.8rem;
+        padding: 0.35rem 0.85rem;
+    }
+}
+
+
+/* ── 11. Profile Form Page ───────────────────────────────────────────────────── */
+
+/* Coloured icon circle at the top of the profile card */
+.cgn-form-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--cgn-accent-soft);
+    color: var(--cgn-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+}
+
+/* Two-step progress indicator above the form */
+.cgn-progress-step {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.cgn-progress-step--active {
+    background: var(--cgn-accent);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(79,70,229,0.35);
+}
+
+.cgn-progress-step--inactive {
+    background: var(--cgn-border);
+    color: var(--cgn-muted);
+}
+
+.cgn-progress-line {
+    height: 2px;
+    background: var(--cgn-border);
+    border-radius: 1px;
+}
+
+/* Input group tweaks — remove the double border between icon and input */
+.input-group .input-group-text {
+    border-color: var(--cgn-border);
+    background-color: var(--cgn-bg);
+}
+
+.input-group .form-control,
+.input-group .form-select {
+    border-color: var(--cgn-border);
+}
+
+.input-group .form-control:focus,
+.input-group .form-select:focus {
+    border-color: var(--cgn-accent);
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+    z-index: 3;
+}
+
+/* Make the left icon visually blend with the focused input border */
+.input-group:focus-within .input-group-text {
+    border-color: var(--cgn-accent);
+}
+
+/* ── 12. Profile Success Page ────────────────────────────────────────────────── */
+
+.cgn-success-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(16,185,129,0.12);
+    color: #10b981;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.25rem;
+}
+
+
+/* ── 13. Assessment Page ─────────────────────────────────────────────────────── */
+
+/* Section header: letter badge + text block side by side */
+.cgn-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.cgn-section-num {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--cgn-accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px rgba(79,70,229,0.3);
+}
+
+/* ── Skill row ──────────────────────────────────────────────────────────────── */
+.cgn-skill-row {
+    border-bottom: 1px solid var(--cgn-border);
+    padding-bottom: 0.75rem;
+}
+.cgn-skill-row:last-of-type { border-bottom: none; }
+
+/* Slider transition so it opens/closes smoothly */
+.cgn-slider-wrap {
+    overflow: hidden;
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+}
+.cgn-slider-wrap.d-none {
+    max-height: 0;
+    opacity: 0;
+}
+
+/* Proficiency label badge colours */
+.cgn-prof-label {
+    min-width: 90px;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+.cgn-prof-low  { background-color: #dbeafe !important; color: #1d4ed8 !important; }
+.cgn-prof-mid  { background-color: #fef3c7 !important; color: #92400e !important; }
+.cgn-prof-high { background-color: #d1fae5 !important; color: #065f46 !important; }
+
+/* Range slider accent colour */
+.form-range::-webkit-slider-thumb { background: var(--cgn-accent); }
+.form-range::-moz-range-thumb     { background: var(--cgn-accent); }
+
+/* ── Interest cards ─────────────────────────────────────────────────────────── */
+.cgn-interest-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    padding: 1rem 0.75rem;
+    border: 2px solid var(--cgn-border);
+    border-radius: var(--cgn-radius);
+    background: var(--cgn-surface);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    text-align: center;
+    min-height: 88px;
+    user-select: none;
+}
+.cgn-interest-card:hover {
+    border-color: var(--cgn-accent);
+    background: var(--cgn-accent-soft);
+    transform: translateY(-2px);
+}
+.cgn-interest-card--selected {
+    border-color: var(--cgn-accent) !important;
+    background: var(--cgn-accent-soft) !important;
+    color: var(--cgn-accent);
+}
+.cgn-interest-card--selected i {
+    color: var(--cgn-accent);
+}
+
+/* ── Technology tags ────────────────────────────────────────────────────────── */
+.cgn-tech-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.85rem;
+    border: 1px solid var(--cgn-border);
+    border-radius: 50px;
+    background: var(--cgn-surface);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    user-select: none;
+}
+.cgn-tech-tag:hover {
+    border-color: var(--cgn-accent);
+    background: var(--cgn-accent-soft);
+}
+.cgn-tech-tag--selected {
+    border-color: var(--cgn-accent) !important;
+    background: var(--cgn-accent) !important;
+    color: #fff !important;
+}
+
+/* ── Work-style cards ───────────────────────────────────────────────────────── */
+.cgn-work-style-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid var(--cgn-border);
+    border-radius: var(--cgn-radius);
+    background: var(--cgn-surface);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    text-align: center;
+    user-select: none;
+}
+.cgn-work-style-card:hover {
+    border-color: var(--cgn-accent);
+    background: var(--cgn-accent-soft);
+}
+.cgn-work-style-card--selected {
+    border-color: var(--cgn-accent) !important;
+    background: var(--cgn-accent-soft) !important;
+}
+
+/* ── Summary badge on success page ─────────────────────────────────────────── */
+.cgn-summary-badge {
+    background-color: var(--cgn-accent-soft) !important;
+    color: var(--cgn-accent) !important;
+    border: 1px solid rgba(79,70,229,0.2);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.cgn-summary-badge-prof {
+    opacity: 0.75;
+    font-weight: 400;
+}
+
+/* Accent progress bar fill (Bootstrap bg-accent override) */
+.bg-accent {
+    background-color: var(--cgn-accent) !important;
+}
+
+
+/* ── 14. Results Page ────────────────────────────────────────────────────────── */
+
+/* Recommendation card — top match gets an accent top border */
+.cgn-rec-card {
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.cgn-rec-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12) !important;
+}
+.cgn-rec-card--top {
+    border-top: 3px solid var(--cgn-accent) !important;
+}
+
+/* Rank ribbon at top of card */
+.cgn-rank-ribbon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--cgn-bg);
+    border-bottom: 1px solid var(--cgn-border);
+    padding: 0.4rem 1rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--cgn-muted);
+    border-radius: calc(var(--cgn-radius) - 1px) calc(var(--cgn-radius) - 1px) 0 0;
+}
+.cgn-rec-card--top .cgn-rank-ribbon {
+    background: linear-gradient(90deg, rgba(79,70,229,0.08) 0%, transparent 100%);
+    color: var(--cgn-accent);
+}
+
+/* Missing skills badges */
+.cgn-missing-badge {
+    background-color: rgba(239,68,68,0.1) !important;
+    color: #b91c1c !important;
+    border: 1px solid rgba(239,68,68,0.2);
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Score breakdown mini table */
+.cgn-breakdown-table {
+    background: var(--cgn-bg);
+    border-radius: var(--cgn-radius-sm);
+    padding: 0.65rem 0.85rem;
+    border: 1px solid var(--cgn-border);
+}
+
+/* Roadmap steps */
+.cgn-roadmap-step {
+    padding-left: 0;
+}
+
+.cgn-roadmap-dot {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--cgn-border);
+    color: var(--cgn-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.cgn-roadmap-dot--priority {
+    background: var(--cgn-accent);
+    color: #fff;
+    box-shadow: 0 1px 6px rgba(79,70,229,0.35);
+}
+
+.cgn-roadmap-step--priority {
+    background: rgba(79,70,229,0.04);
+    border-left: 3px solid var(--cgn-accent);
+    padding-left: 0.6rem;
+    border-radius: 0 var(--cgn-radius-sm) var(--cgn-radius-sm) 0;
+}
+
+.cgn-priority-badge {
+    background-color: var(--cgn-accent-soft) !important;
+    color: var(--cgn-accent) !important;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 1px solid rgba(79,70,229,0.2);
+}
+
+/* AI Smart Match & Confidence Badges */
+.cgn-smart-badge {
+    background-color: rgba(79, 70, 229, 0.08) !important;
+    color: var(--cgn-accent) !important;
+    border: 1px solid rgba(79, 70, 229, 0.25);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.cgn-confidence-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    border-radius: 20px;
+}
+.cgn-confidence-high {
+    background-color: #ecfdf5 !important;
+    color: #047857 !important;
+    border: 1px solid #a7f3d0;
+}
+.cgn-confidence-moderate {
+    background-color: #eff6ff !important;
+    color: #1d4ed8 !important;
+    border: 1px solid #bfdbfe;
+}
+.cgn-confidence-preliminary {
+    background-color: #fffbeb !important;
+    color: #b45309 !important;
+    border: 1px solid #fde68a;
+}
+
+/* Print styles — clean single-column output */
+@media print {
+    .cgn-navbar, .cgn-footer, .btn, .alert { display: none !important; }
+    .card { border: 1px solid #ccc !important; box-shadow: none !important; }
+    .collapse { display: block !important; }
+}
+

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Assessment Saved — AI Career Guidance System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+
+      <!-- Success icon + heading -->
+      <div class="text-center mb-4">
+        <div class="cgn-success-icon mb-3">
+          <i class="bi bi-clipboard2-check-fill"></i>
+        </div>
+        <h2 class="fw-bold mb-1">Assessment Saved!</h2>
+        <p class="text-muted">
+          Great work, <strong>{{ student_name }}</strong>!
+          Assessment #{{ assessment_id }} has been stored.
+          {% if total_assessments > 1 %}
+            <br><span class="small">
+              You have completed <strong>{{ total_assessments }}</strong> assessments in total.
+              Each one is preserved in the database.
+            </span>
+          {% endif %}
+        </p>
+      </div>
+
+      <!-- Summary card -->
+      <div class="card border-0 shadow-sm rounded-3 mb-4">
+        <div class="card-body p-4">
+
+          <h6 class="fw-bold mb-3 text-accent">
+            <i class="bi bi-list-check me-2"></i>Your Assessment Summary
+          </h6>
+
+          <!-- Skills -->
+          {% if skills_display %}
+          <div class="mb-3">
+            <p class="fw-semibold small text-uppercase text-muted mb-2" style="letter-spacing:.05em;">
+              Skills Rated
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+              {% for s in skills_display %}
+                <span class="badge cgn-summary-badge">
+                  {{ s.label }}
+                  <span class="cgn-summary-badge-prof ms-1">{{ s.proficiency }}</span>
+                </span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Interests -->
+          {% if interests_display %}
+          <div class="mb-3">
+            <p class="fw-semibold small text-uppercase text-muted mb-2" style="letter-spacing:.05em;">
+              Interests Selected
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+              {% for i in interests_display %}
+                <span class="badge bg-label">{{ i }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Technologies -->
+          {% if technologies %}
+          <div class="mb-3">
+            <p class="fw-semibold small text-uppercase text-muted mb-2" style="letter-spacing:.05em;">
+              Technologies
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+              {% for t in technologies %}
+                <span class="badge bg-label">{{ t }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Goals -->
+          <div>
+            <p class="fw-semibold small text-uppercase text-muted mb-2" style="letter-spacing:.05em;">
+              Career Goals
+            </p>
+            <ul class="list-unstyled mb-0 small">
+              {% if goals.short_term_role %}
+              <li class="mb-1">
+                <i class="bi bi-arrow-right-circle text-accent me-2"></i>
+                <strong>Target role:</strong> {{ goals.short_term_role }}
+              </li>
+              {% endif %}
+              {% if goals.work_style %}
+              <li class="mb-1">
+                <i class="bi bi-arrow-right-circle text-accent me-2"></i>
+                <strong>Work style:</strong> {{ goals.work_style | capitalize }}
+              </li>
+              {% endif %}
+              {% if goals.learning_style %}
+              <li class="mb-1">
+                <i class="bi bi-arrow-right-circle text-accent me-2"></i>
+                <strong>Learning style:</strong> {{ goals.learning_style | capitalize }}
+              </li>
+              {% endif %}
+              {% if goals.dream_role %}
+              <li>
+                <i class="bi bi-arrow-right-circle text-accent me-2"></i>
+                <strong>Dream role:</strong> {{ goals.dream_role }}
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="{{ url_for('assessment.index') }}" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-repeat me-1"></i>Retake Assessment
+        </a>
+        <a href="{{ url_for('results.show', assessment_id=assessment_id) }}" class="btn btn-accent">
+          <i class="bi bi-bar-chart-line-fill me-1"></i>View My Results
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

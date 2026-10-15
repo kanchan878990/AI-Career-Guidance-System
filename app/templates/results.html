@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+{% block title %}Your Career Recommendations — AI Career Guidance System{% endblock %}
+
+{% block extra_head %}
+<style>
+  .cgn-score-ring { transition: stroke-dashoffset 1s ease; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4 py-md-5">
+
+  <!-- ── Page header ─────────────────────────────────────────────────────── -->
+  <div class="row justify-content-center mb-4">
+    <div class="col-lg-10">
+      <div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
+        <div class="cgn-form-icon flex-shrink-0">
+          <i class="bi bi-bar-chart-line-fill"></i>
+        </div>
+        <div>
+          <h2 class="fw-bold mb-0">Your Career Recommendations</h2>
+          <p class="text-muted small mb-0">
+            Hello, <strong>{{ student_name }}</strong>!
+            Based on assessment #{{ assessment_id }}, here are your top matches.
+            {% if total_assessments > 1 %}
+              You have taken {{ total_assessments }} assessments — these results reflect your latest.
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <!-- Methodology note — honest about what scores mean -->
+      <div class="alert alert-info d-flex gap-2 align-items-start py-2 mt-3" role="note">
+        <i class="bi bi-info-circle-fill flex-shrink-0 mt-1"></i>
+        <small>
+          <strong>How scores are calculated:</strong>
+          Each score (0–100) reflects how well your self-reported skills, interests, technologies,
+          and career goals align with documented requirements for that career path.
+          Scores do <em>not</em> predict employment probability.
+          <a href="#methodology" class="alert-link">See breakdown below.</a>
+        </small>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ Top 3 Career Recommendation Cards ══════════════════════════════════ -->
+  <div class="row justify-content-center g-4 mb-5">
+    {% for rec in recommendations %}
+
+    <div class="col-lg-{% if recommendations|length == 1 %}6{% elif recommendations|length == 2 %}5{% else %}4{% endif %} col-md-6">
+      <div class="card border-0 shadow-sm rounded-3 h-100 cgn-rec-card
+                  {% if rec.rank == 1 %}cgn-rec-card--top{% endif %}">
+
+        <!-- Rank ribbon -->
+        <div class="cgn-rank-ribbon">
+          {% if rec.rank == 1 %}
+            <i class="bi bi-trophy-fill text-warning me-1"></i>Best Match
+          {% elif rec.rank == 2 %}
+            <i class="bi bi-award-fill text-secondary me-1"></i>2nd Match
+          {% else %}
+            <i class="bi bi-patch-check-fill text-muted me-1"></i>3rd Match
+          {% endif %}
+        </div>
+
+        <div class="card-body p-4 pt-5">
+
+          <!-- Career name + score bar -->
+          <h5 class="fw-bold mb-1">{{ rec.career_name }}</h5>
+          {% if rec.description %}
+            <p class="text-muted small mb-2">{{ rec.description }}</p>
+          {% endif %}
+
+          <!-- Smart Career Matching Badges (Hybrid AI & Confidence) -->
+          {% if rec.skill_breakdown and rec.skill_breakdown.cosine_similarity is defined %}
+          <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+            <span class="badge cgn-smart-badge" title="High-dimensional vector cosine similarity calculated with scikit-learn">
+              <i class="bi bi-cpu me-1"></i>AI Match: {{ rec.skill_breakdown.cosine_similarity }}%
+            </span>
+            {% if rec.skill_breakdown.confidence_level %}
+              {% set conf = rec.skill_breakdown.confidence_level %}
+              <span class="badge cgn-confidence-badge {% if conf == 'High' %}cgn-confidence-high{% elif conf == 'Moderate' %}cgn-confidence-moderate{% else %}cgn-confidence-preliminary{% endif %}" title="Deterministic evidence quality and completeness tier">
+                <i class="bi bi-shield-check me-1"></i>{{ conf }} Confidence
+              </span>
+            {% endif %}
+          </div>
+          {% endif %}
+
+          <!-- Score bar -->
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <span class="small fw-semibold">Compatibility Score</span>
+              <span class="fw-bold fs-5
+                {% if rec.score >= 70 %}text-success
+                {% elif rec.score >= 45 %}text-warning
+                {% else %}text-danger{% endif %}">
+                {{ rec.score }}%
+              </span>
+            </div>
+            <div class="progress" style="height:10px; border-radius:5px;">
+              <div class="progress-bar cgn-score-bar
+                          {% if rec.score >= 70 %}bg-success
+                          {% elif rec.score >= 45 %}bg-warning
+                          {% else %}bg-danger{% endif %}"
+                   role="progressbar"
+                   data-score="{{ rec.score }}"
+                   style="width:0%; transition: width 1.2s ease {{ (rec.rank - 1) * 0.2 }}s;"
+                   aria-valuenow="{{ rec.score }}" aria-valuemin="0" aria-valuemax="100">
+              </div>
+            </div>
+          </div>
+
+          <!-- Score breakdown mini-table -->
+          {% if rec.skill_breakdown %}
+          <div class="cgn-breakdown-table mb-3">
+            <p class="small fw-semibold text-muted mb-1">Score breakdown:</p>
+            <div class="row g-1">
+              {% set breakdown_labels = [
+                ("cosine_similarity", "AI Vector Match"),
+                ("rule_score",        "Rule Score"),
+                ("skill_presence",    "Skill coverage"),
+                ("skill_proficiency", "Proficiency level"),
+                ("interests",         "Interest match"),
+                ("technologies",      "Technology overlap"),
+                ("goals",             "Goal alignment"),
+              ] %}
+              {% for key, label in breakdown_labels %}
+                {% if rec.skill_breakdown[key] is defined %}
+                <div class="col-6">
+                  <div class="d-flex justify-content-between">
+                    <span class="text-muted" style="font-size:.75rem;">{{ label }}</span>
+                    <span class="fw-semibold" style="font-size:.75rem;">{{ rec.skill_breakdown[key] }}{% if key in ['cosine_similarity', 'rule_score'] %}%{% endif %}</span>
+                  </div>
+                </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Why matched -->
+          {% if rec.match_reasons %}
+          <div class="mb-3">
+            <p class="small fw-semibold text-uppercase text-muted mb-2" style="letter-spacing:.04em;">
+              Why this career matches you
+            </p>
+            <ul class="list-unstyled mb-0">
+              {% for reason in rec.match_reasons %}
+                <li class="d-flex align-items-start gap-2 mb-1">
+                  <i class="bi bi-check-circle-fill text-success flex-shrink-0 mt-1" style="font-size:.8rem;"></i>
+                  <span class="small">{{ reason }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+
+          <!-- Missing skills -->
+          {% if rec.missing_skills %}
+          <div class="mb-3">
+            <p class="small fw-semibold text-uppercase text-muted mb-2" style="letter-spacing:.04em;">
+              Skills to develop
+            </p>
+            <div class="d-flex flex-wrap gap-1">
+              {% for skill in rec.missing_skills %}
+                <span class="badge cgn-missing-badge">
+                  <i class="bi bi-plus-circle me-1"></i>{{ skill }}
+                </span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Suggested technologies -->
+          {% if rec.suggested_techs %}
+          <div class="mb-3">
+            <p class="small fw-semibold text-uppercase text-muted mb-2" style="letter-spacing:.04em;">
+              Technologies to learn
+            </p>
+            <div class="d-flex flex-wrap gap-1">
+              {% for tech in rec.suggested_techs %}
+                <span class="badge bg-label">{{ tech }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Roadmap accordion (collapsed by default for rank > 1) -->
+          {% if rec.roadmap %}
+          <div class="mt-3">
+            <button class="btn btn-outline-secondary btn-sm w-100"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#roadmap-{{ rec.rank }}"
+                    aria-expanded="{{ 'true' if rec.rank == 1 else 'false' }}">
+              <i class="bi bi-map me-1"></i>
+              {{ 'Hide' if rec.rank == 1 else 'Show' }} Learning Roadmap
+            </button>
+
+            <div class="collapse {% if rec.rank == 1 %}show{% endif %}"
+                 id="roadmap-{{ rec.rank }}">
+              <div class="mt-3">
+                <ol class="list-unstyled mb-0">
+                  {% for step in rec.roadmap %}
+                    <li class="cgn-roadmap-step {% if step.priority %}cgn-roadmap-step--priority{% endif %} mb-3">
+                      <div class="d-flex align-items-start gap-2">
+                        <div class="cgn-roadmap-dot flex-shrink-0 {% if step.priority %}cgn-roadmap-dot--priority{% endif %}">
+                          {{ loop.index }}
+                        </div>
+                        <div>
+                          <p class="fw-semibold mb-0 small">
+                            {{ step.title }}
+                            {% if step.priority %}
+                              <span class="badge cgn-priority-badge ms-1">Priority</span>
+                            {% endif %}
+                          </p>
+                          <p class="text-muted mb-1" style="font-size:.8rem;">{{ step.desc }}</p>
+                          <p class="mb-0" style="font-size:.75rem;">
+                            <i class="bi bi-link-45deg text-accent me-1"></i>
+                            <span class="text-muted">{{ step.resource }}</span>
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  {% endfor %}
+                </ol>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+        </div><!-- end card-body -->
+      </div><!-- end card -->
+    </div><!-- end col -->
+
+    {% endfor %}
+  </div>
+  <!-- ── End career cards ───────────────────────────────────────────────── -->
+
+
+  <!-- ══ Methodology section ════════════════════════════════════════════════ -->
+  <div class="row justify-content-center mb-4" id="methodology">
+    <div class="col-lg-10">
+      <div class="card border-0 bg-surface rounded-3">
+        <div class="card-body p-4">
+          <h6 class="fw-bold mb-3">
+            <i class="bi bi-cpu-fill me-2 text-accent"></i>How Smart Career Matching Works
+          </h6>
+          <div class="row g-3">
+            {% set components = [
+              ("bi-diagram-3",         "Vector Space Model (40%)",     "Calculates high-dimensional cosine similarity across skills, interests, and technologies using scikit-learn."),
+              ("bi-shield-check",      "Qualification Rules (60%)",   "Evaluates core prerequisite coverage, proficiency depth, and explicit short-term career objective alignment."),
+              ("bi-speedometer2",      "Proficiency Scaling",          "Normalizes 1–5 self-reported skill ratings against industry role importance weights."),
+              ("bi-patch-check",       "Deterministic Confidence",     "Measures response completeness, rating variance, and verified toolstack breadth (High / Moderate / Preliminary)."),
+              ("bi-bullseye",          "Goal & Keyword Matching",      "Awards alignment bonuses when your stated goals and aspirations match career domain keywords."),
+              ("bi-signpost-split",    "Personalized Roadmaps",        "Dynamically tags roadmap steps as Priority when they address specific gaps in your skill profile."),
+            ] %}
+            {% for icon, title, desc in components %}
+            <div class="col-md-6 col-lg-4">
+              <div class="d-flex gap-2">
+                <i class="bi {{ icon }} text-accent mt-1 flex-shrink-0"></i>
+                <div>
+                  <p class="fw-semibold small mb-0">{{ title }}</p>
+                  <p class="text-muted small mb-0">{{ desc }}</p>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          <p class="text-muted small mt-3 mb-0">
+            <i class="bi bi-exclamation-circle me-1"></i>
+            These scores reflect structured alignment with curriculum criteria and documented career requirements.
+            They are not statistical predictions of employment outcomes and should guide your exploration alongside mentoring and personal research.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ── Action buttons ──────────────────────────────────────────────────── -->
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="{{ url_for('assessment.index') }}" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-repeat me-1"></i>Retake Assessment
+        </a>
+        <button onclick="window.print()" class="btn btn-outline-secondary">
+          <i class="bi bi-printer me-1"></i>Print / Save as PDF
+        </button>
+        <a href="{{ url_for('main.index') }}" class="btn btn-accent">
+          <i class="bi bi-house me-1"></i>Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/results.js') }}"></script>
+{% endblock %}

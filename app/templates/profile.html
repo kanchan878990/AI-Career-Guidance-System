@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %}Your Profile — AI Career Guidance System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+
+            <!-- ── Card wrapper ─────────────────────────────────────────── -->
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body p-4 p-md-5">
+
+                    <!-- Header -->
+                    <div class="text-center mb-4">
+                        <div class="cgn-form-icon mb-3">
+                            <i class="bi bi-person-vcard-fill"></i>
+                        </div>
+                        <h2 class="fw-bold mb-1">Build Your Profile</h2>
+                        <p class="text-muted small">
+                            Step 1 of 2 &mdash; Tell us a bit about yourself so we can
+                            personalise your career recommendations.
+                        </p>
+                    </div>
+
+                    <!-- Progress indicator (purely visual) -->
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <div class="cgn-progress-step cgn-progress-step--active">
+                            <span>1</span>
+                        </div>
+                        <div class="cgn-progress-line flex-grow-1"></div>
+                        <div class="cgn-progress-step cgn-progress-step--inactive">
+                            <span>2</span>
+                        </div>
+                    </div>
+
+                    <!-- ── Profile Form ──────────────────────────────────── -->
+                    <!--
+                      action=""       → submit to the same URL (/profile/)
+                      method="post"   → sends data in the request body (not in the URL)
+                      novalidate      → lets Flask handle validation instead of the browser
+                    -->
+                    <form action="" method="post" novalidate>
+
+                        <!-- Full Name -->
+                        <div class="mb-3">
+                            <label for="name" class="form-label fw-semibold">
+                                Full Name <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-surface border-end-0">
+                                    <i class="bi bi-person text-muted"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    class="form-control border-start-0"
+                                    id="name"
+                                    name="name"
+                                    placeholder="e.g. Arjun Sharma"
+                                    value="{{ form_data.get('name', '') }}"
+                                    maxlength="100"
+                                    required
+                                    autocomplete="name"
+                                />
+                            </div>
+                            <div class="form-text text-muted">Your name is only stored locally.</div>
+                        </div>
+
+                        <!-- Email (optional) -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label fw-semibold">
+                                Email Address <span class="text-muted fw-normal">(optional)</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-surface border-end-0">
+                                    <i class="bi bi-envelope text-muted"></i>
+                                </span>
+                                <input
+                                    type="email"
+                                    class="form-control border-start-0"
+                                    id="email"
+                                    name="email"
+                                    placeholder="e.g. arjun@example.com"
+                                    value="{{ form_data.get('email', '') }}"
+                                    autocomplete="email"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Education Level -->
+                        <div class="mb-3">
+                            <label for="education_level" class="form-label fw-semibold">
+                                Education Level <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-surface border-end-0">
+                                    <i class="bi bi-mortarboard text-muted"></i>
+                                </span>
+                                <select
+                                    class="form-select border-start-0"
+                                    id="education_level"
+                                    name="education_level"
+                                    required
+                                >
+                                    <option value="" disabled
+                                        {% if not form_data.get('education_level') %}selected{% endif %}>
+                                        — Select your level —
+                                    </option>
+                                    {% set levels = [
+                                        "High School / 12th Grade",
+                                        "Undergraduate (B.Tech / B.E. / B.Sc)",
+                                        "Postgraduate (M.Tech / M.Sc / MCA)",
+                                        "PhD / Research",
+                                        "Diploma / Polytechnic",
+                                        "Self-taught / Bootcamp"
+                                    ] %}
+                                    {% for level in levels %}
+                                        <option value="{{ level }}"
+                                            {% if form_data.get('education_level') == level %}selected{% endif %}>
+                                            {{ level }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Field of Study -->
+                        <div class="mb-4">
+                            <label for="field_of_study" class="form-label fw-semibold">
+                                Field of Study <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-surface border-end-0">
+                                    <i class="bi bi-book text-muted"></i>
+                                </span>
+                                <input
+                                    type="text"
+                                    class="form-control border-start-0"
+                                    id="field_of_study"
+                                    name="field_of_study"
+                                    placeholder="e.g. Computer Science, AI & ML, Electronics"
+                                    value="{{ form_data.get('field_of_study', '') }}"
+                                    maxlength="100"
+                                    required
+                                />
+                            </div>
+                            <div class="form-text text-muted">
+                                Your current or most recent area of study.
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-accent btn-lg">
+                                <i class="bi bi-arrow-right-circle me-2"></i>
+                                Save &amp; Continue to Assessment
+                            </button>
+                        </div>
+
+                    </form>
+                    <!-- ── End Form ──────────────────────────────────────── -->
+
+                </div><!-- end card-body -->
+            </div><!-- end card -->
+
+            <!-- Back to home link -->
+            <div class="text-center mt-3">
+                <a href="{{ url_for('main.index') }}" class="text-muted small">
+                    <i class="bi bi-arrow-left me-1"></i>Back to Home
+                </a>
+            </div>
+
+        </div><!-- end col -->
+    </div><!-- end row -->
+</div>
+{% endblock %}

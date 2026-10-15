@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+{% block title %}AI Career Guidance System — Find Your Path{% endblock %}
+
+{% block content %}
+
+<!-- ── Hero Section ─────────────────────────────────────────────────────── -->
+<section class="cgn-hero d-flex align-items-center">
+    <div class="container text-center py-5">
+
+        <div class="badge bg-accent-soft text-accent mb-3 px-3 py-2 rounded-pill">
+            <i class="bi bi-stars me-1"></i> AI-Powered Career Guidance
+        </div>
+
+        <h1 class="display-4 fw-bold text-white mb-3">
+            Discover the Career Path<br class="d-none d-md-block"/>
+            <span class="text-accent-light">Built for You</span>
+        </h1>
+
+        <p class="lead text-white-75 mb-4 mx-auto" style="max-width: 580px;">
+            Answer a few questions about your skills, interests, and goals.
+            Our AI recommendation engine will match you with the best-fit tech careers
+            and give you a personalised learning roadmap.
+        </p>
+
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{{ url_for('profile.index') }}" class="btn btn-accent btn-lg px-4 shadow">
+                <i class="bi bi-rocket-takeoff me-2"></i>Start Your Assessment
+            </a>
+            <a href="#careers" class="btn btn-outline-light btn-lg px-4">
+                <i class="bi bi-grid-3x3-gap me-2"></i>Explore Careers
+            </a>
+        </div>
+
+        <!-- Quick stats row -->
+        <div class="row justify-content-center mt-5 g-3">
+            <div class="col-auto">
+                <div class="cgn-stat-pill">
+                    <i class="bi bi-briefcase-fill text-accent me-2"></i>
+                    <strong>7</strong> Career Paths
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="cgn-stat-pill">
+                    <i class="bi bi-lightning-fill text-accent me-2"></i>
+                    AI-Powered Matching
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="cgn-stat-pill">
+                    <i class="bi bi-map-fill text-accent me-2"></i>
+                    Personalised Roadmap
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- ── End Hero ──────────────────────────────────────────────────────────── -->
+
+
+<!-- ── How It Works ──────────────────────────────────────────────────────── -->
+<section class="py-5 bg-surface">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">How It Works</h2>
+            <p class="text-muted">Three simple steps to your perfect career match.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+
+            <div class="col-md-4 col-sm-6">
+                <div class="cgn-step-card h-100 text-center p-4">
+                    <div class="cgn-step-num">1</div>
+                    <i class="bi bi-person-vcard-fill fs-1 text-accent mb-3 d-block"></i>
+                    <h5 class="fw-semibold">Build Your Profile</h5>
+                    <p class="text-muted small mb-0">
+                        Tell us your name, education level, and field of study.
+                        Takes less than a minute.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="cgn-step-card h-100 text-center p-4">
+                    <div class="cgn-step-num">2</div>
+                    <i class="bi bi-clipboard2-pulse-fill fs-1 text-accent mb-3 d-block"></i>
+                    <h5 class="fw-semibold">Take the Assessment</h5>
+                    <p class="text-muted small mb-0">
+                        Rate your skills, pick your interests, and share your career goals
+                        — all on one page.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6">
+                <div class="cgn-step-card h-100 text-center p-4">
+                    <div class="cgn-step-num">3</div>
+                    <i class="bi bi-bar-chart-line-fill fs-1 text-accent mb-3 d-block"></i>
+                    <h5 class="fw-semibold">Get Your Results</h5>
+                    <p class="text-muted small mb-0">
+                        Receive your top career matches, match explanations, and
+                        a step-by-step learning roadmap.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- ── End How It Works ──────────────────────────────────────────────────── -->
+
+
+<!-- ── Career Paths Section ──────────────────────────────────────────────── -->
+<section class="py-5" id="careers">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Career Paths We Cover</h2>
+            <p class="text-muted">
+                Our system currently supports 7 in-demand technology careers
+                — with more coming soon.
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- AI/ML Engineer -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="cgn-career-card h-100 p-4">
+                    <div class="cgn-career-icon mb-3" style="--card-color: #6366f1;">
+                        <i class="bi bi-cpu-fill"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">AI / ML Engineer</h6>
+                    <p class="text-muted small mb-3">
+                        Build and deploy machine learning models and AI systems
+                        that power real-world applications.
+                    </p>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-label">Python</span>
+                        <span class="badge bg-label">TensorFlow</span>
+                        <span class="badge bg-label">PyTorch</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Scientist -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="cgn-career-card h-100 p-4">
+                    <div class="cgn-career-icon mb-3" style="--card-color: #0ea5e9;">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Data Scientist</h6>
+                    <p class="text-muted small mb-3">
+                        Analyse complex datasets, build predictive models,
+                        and uncover insights that drive business decisions.
+                    </p>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-label">Python</span>
+                        <span class="badge bg-label">Statistics</span>
+                        <span class="badge bg-label">SQL</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Analyst -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="cgn-career-card h-100 p-4">
+                    <div class="cgn-career-icon mb-3" style="--card-color: #10b981;">
+                        <i class="bi bi-table"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Data Analyst</h6>
+                    <p class="text-muted small mb-3">
+                        Transform raw data into clear reports and dashboards
+                        that help teams make smarter decisions faster.
+                    </p>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-label">SQL</span>
+                        <span class="badge bg-label">Excel</span>
+                        <span class="badge bg-label">Power BI</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Software Developer -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="cgn-career-card h-100 p-4">
+                    <div class="cgn-career-icon mb-3" style="--card-color: #f59e0b;">
+                        <i class="bi bi-code-slash"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Software Developer</h6>
+                    <p class="text-muted small mb-3">
+                        Design and build software applications — from desktop
+                        tools to enterprise systems and APIs.
+                    </p>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-label">Java / C++</span>
+                        <span class="badge bg-label">DSA</span>
+                        <span class="badge bg-label">Git</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Web Developer -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="cgn-career-card h-100 p-4">
+                    <div class="cgn-career-icon mb-3" style="--card-color: #ec4899;">
+                        <i class="bi bi-globe2"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Web Developer</h6>
+                    <p class="text-muted small mb-3">
+                        Create responsive websites and web apps using modern
+                        front-end and back-end frameworks.
+                    </p>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-label">HTML/CSS</span>
+                        <span class="badge bg-label">JavaScript</span>
+                        <span class="badge bg-label">React</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cybersecurity Analyst -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="cgn-career-card h-100 p-4">
+                    <div class="cgn-career-icon mb-3" style="--card-color: #ef4444;">
+                        <i class="bi bi-shield-lock-fill"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Cybersecurity Analyst</h6>
+                    <p class="text-muted small mb-3">
+                        Protect organisations from cyber threats by monitoring
+                        systems, detecting vulnerabilities, and responding to incidents.
+                    </p>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-label">Networking</span>
+                        <span class="badge bg-label">Linux</span>
+                        <span class="badge bg-label">Security+</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloud Engineer -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="cgn-career-card h-100 p-4">
+                    <div class="cgn-career-icon mb-3" style="--card-color: #06b6d4;">
+                        <i class="bi bi-cloud-fill"></i>
+                    </div>
+                    <h6 class="fw-bold mb-2">Cloud Engineer</h6>
+                    <p class="text-muted small mb-3">
+                        Design, build, and manage cloud infrastructure on platforms
+                        like AWS, Azure, and GCP to keep services reliable and scalable.
+                    </p>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-label">AWS</span>
+                        <span class="badge bg-label">Docker</span>
+                        <span class="badge bg-label">Terraform</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coming Soon card -->
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="cgn-career-card cgn-career-card--muted h-100 p-4 d-flex flex-column justify-content-center align-items-center text-center">
+                    <i class="bi bi-hourglass-split fs-2 text-muted mb-3"></i>
+                    <h6 class="fw-bold text-muted mb-1">More Coming Soon</h6>
+                    <p class="text-muted small mb-0">
+                        DevOps Engineer, UI/UX Designer, and more are planned for future releases.
+                    </p>
+                </div>
+            </div>
+
+        </div><!-- end .row -->
+    </div>
+</section>
+<!-- ── End Career Paths ───────────────────────────────────────────────────── -->
+
+
+<!-- ── CTA Banner ────────────────────────────────────────────────────────── -->
+<section class="cgn-cta-banner py-5 text-center">
+    <div class="container">
+        <h2 class="fw-bold text-white mb-2">Ready to find your ideal career?</h2>
+        <p class="text-white-75 mb-4">
+            It only takes a few minutes. No account required.
+        </p>
+        <a href="{{ url_for('profile.index') }}" class="btn btn-light btn-lg px-5 fw-semibold">
+            <i class="bi bi-rocket-takeoff me-2"></i>Begin Free Assessment
+        </a>
+    </div>
+</section>
+<!-- ── End CTA Banner ────────────────────────────────────────────────────── -->
+
+{% endblock %}

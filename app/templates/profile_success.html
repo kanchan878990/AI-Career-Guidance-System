@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Profile Saved — AI Career Guidance System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 text-center">
+
+            <!-- Success icon -->
+            <div class="cgn-success-icon mb-4">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+
+            <h2 class="fw-bold mb-2">Profile Saved!</h2>
+            <p class="text-muted mb-4">
+                Great to meet you, <strong>{{ student_name }}</strong>!
+                Your profile has been saved to the database.
+            </p>
+
+            <!-- What's next card -->
+            <div class="card border-0 shadow-sm rounded-3 mb-4">
+                <div class="card-body p-4 text-start">
+                    <h6 class="fw-bold mb-3">
+                        <i class="bi bi-list-check me-2 text-accent"></i>What Happens Next
+                    </h6>
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex align-items-start gap-2 mb-2">
+                            <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                            <span>Your profile is saved (name, education, field of study)</span>
+                        </li>
+                        <li class="d-flex align-items-start gap-2 mb-2">
+                            <i class="bi bi-arrow-right-circle-fill text-accent mt-1"></i>
+                            <span>
+                                <strong>Next:</strong> Complete the assessment — rate your
+                                skills, pick interests, and share your career goals.
+                            </span>
+                        </li>
+                        <li class="d-flex align-items-start gap-2">
+                            <i class="bi bi-hourglass-split text-warning mt-1"></i>
+                            <span>
+                                <strong>AI Recommendations</strong> — coming in Phase 5.
+                                The engine will match you to the best-fit careers.
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="{{ url_for('profile.index') }}" class="btn btn-outline-secondary">
+                    <i class="bi bi-pencil me-1"></i>Update Profile
+                </a>
+                <a href="{{ url_for('assessment.index') }}" class="btn btn-accent">
+                    <i class="bi bi-clipboard2-pulse me-1"></i>Start Assessment
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
